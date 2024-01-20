@@ -28,7 +28,7 @@ struct TreeNode {
 
 class Solution {
 	public:
-	int task(vector<vector<int>>& v){
+	int sumSubarrayMins(vector<int>& arr){
 		int answer {};
 		return answer;
 	}
@@ -47,8 +47,8 @@ int main (int argc, char *argv[]) {
 	double elapsed_time {};
 
 	vector<vector<vector<int>>> tests = {
-		{{}, {}, {}, {}},
-		{{}, {}}
+		{{4,3,2,-1}, {3,2,1,-1}, {1,1,-1,-2}, {-1,-1,-2,-3}},
+		{{3,2}, {1,0}}
 	};
 
 	vector<int> answers = {
@@ -60,7 +60,7 @@ int main (int argc, char *argv[]) {
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->task(tests[i]);
+		answer = s->sumSubarrayMins(tests[i]);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';
