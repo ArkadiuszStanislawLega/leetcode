@@ -1,7 +1,6 @@
 #include <climits>
 #include <iostream>
 #include <iterator>
-#include <numeric>
 #include <ratio>
 #include <string>
 #include <unordered_map>
@@ -29,19 +28,9 @@ struct TreeNode {
 
 class Solution {
 	public:
-	int lengestCommonSubsequence(string text1, string text2){
-		int i2 {}, counter {};
-		for(int i {}; i < text1.size(); i++){
-
-			for(int j {i2}; j < text2.size(); j++){
-				if(text1[i] == text2[j]){
-					counter++;
-					i2 = j+1;
-					break;
-				}
-			}
-		}
-		return counter;
+	vector<int> task(vector<vector<int>>& v){
+		vector<int> answer {};
+		return answer;
 	}
 };
 
@@ -54,32 +43,31 @@ void print_vector(vector<int>& v){
 }
 
 int main (int argc, char *argv[]) {
-	int answer {};
+	vector<int> answer {};
 	double elapsed_time {};
 
-	vector<pair<string, string>>tests = {
-		{"abcde", "ace"},
-		{"abc", "abc"},
-		{"abc", "def"},
-		{"ezupkr", "ubmrapg"},
-		{"oxcpqrsvwf", "shmtulqrypy"}
+	vector<vector<vector<int>>> tests = {
+		{{}, {}, {}, {}},
+		{{}, {}}
 	};
 
-	vector<int> answers = {
-		3,
-		3,
-		0,
-		2
+	vector<vector<int>> answers = {
+		{},
+		{}
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->lengestCommonSubsequence(tests[i].first, tests[i].second);
+		answer = s->task(tests[i]);
 		auto end = high_resolution_clock::now();
 
-		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';
+		cout << "test " << i+1 << "\n\ttarget value: ";
+		print_vector(answers[i]);
+		cout << "\n\trecived value: ";
+		print_vector(answer);
+		cout << '\n';
 
 		elapsed_time = duration<double, milli>(end-start).count();
 		cout << "\nelapsed time " << elapsed_time << "ms";
