@@ -33,10 +33,10 @@ class Solution {
 		return answer;
 	}
 };
-
-void print_vector(vector<int>& v){
+template <typename T>
+void print_vector(vector<T>& v){
 	cout << '{';
-	for(const int &i: v){
+	for(const T &i: v){
 		cout << i << ',';
 	}
 	cout << "\b}";
@@ -64,9 +64,9 @@ int main (int argc, char *argv[]) {
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: ";
-		print_vector(answers[i]);
+		print_vector<int>(answers[i]);
 		cout << "\n\trecived value: ";
-		print_vector(answer);
+		print_vector<int>(answer);
 		cout << '\n';
 
 		elapsed_time = duration<double, milli>(end-start).count();

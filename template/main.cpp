@@ -34,9 +34,10 @@ class Solution {
 	}
 };
 
-void print_vector(vector<int>& v){
+template <typename T>
+void print_vector(vector<T>& v){
 	cout << '{';
-	for(const int &i: v){
+	for(const T &i: v){
 		cout << i << ',';
 	}
 	cout << "\b}";
@@ -46,14 +47,10 @@ int main (int argc, char *argv[]) {
 	int answer {};
 	double elapsed_time {};
 
-	vector<vector<vector<int>>> tests = {
-		{{}, {}, {}, {}},
-		{{}, {}}
+	vector<> tests = {
 	};
 
-	vector<int> answers = {
-		8,
-		0
+	vector<> answers = {
 	};
 
 	for(int i {}; i < tests.size(); i++){
