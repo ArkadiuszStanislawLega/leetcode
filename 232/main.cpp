@@ -26,11 +26,39 @@ struct TreeNode {
 	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right){}
 };
 
-class Solution {
-	public:
-	int task(vector<vector<int>>& v){
-		int answer {};
-		return answer;
+class MyQueue {
+private: 
+	stack<int> _s1 {}, _s2 {};
+public:
+	MyQueue() {}
+
+	void push(int x) {
+		while(!this->_s1.empty()){
+		    this->_s2.push(this->_s1.top());
+		    this->_s1.pop();
+		}
+
+		this->_s1.push(x);
+
+		while(!this->_s2.empty()){
+		    this->_s1.push(this->_s2.top());
+		    this->_s2.pop();
+		}
+	}
+
+	int pop() {
+		int temp = this->_s1.top();
+		this->_s1.pop();
+
+		return temp;
+	}
+
+	int peek() {
+		return this->_s1.top();
+	}
+
+	bool empty() {
+		return this->_s1.empty();
 	}
 };
 
