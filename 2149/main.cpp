@@ -29,21 +29,20 @@ struct TreeNode {
 class Solution {
 	public:
 	vector<int> rearrangeArray(vector<int>& nums){
-		vector<int> plus {}, minus {}, answer {};
+		int pos {}, neg {1};
+		vector<int> answer (nums.size());
 
-		for(const int& n : nums ){
-			if(n > 0){
-				plus.push_back(n);
+		for(int i {}; i < nums.size(); i++){
+			if(nums[i] > 0){
+				answer[pos] = nums[i];
+				pos += 2;
 				continue;
 			}
 
-			minus.push_back(n);
+			answer[neg] = nums[i];
+			neg += 2;
 		}
-
-		for(int i {}; nums.size() != answer.size(); i++){
-			answer.push_back(plus.at(i));
-			answer.push_back(minus.at(i));
-		}
+	
 		return answer;
 	}
 };
