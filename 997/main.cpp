@@ -29,35 +29,18 @@ struct TreeNode {
 class Solution {
 	public:
 	int findJudge(int n, vector<vector<int>>& trust){
-		if(trust.size() == 0){
-			if(n == 1){
-				return n;
-			}
-
-			if(n > 1){
-				return -1;
-			}
+		vector<int> counter (n+1);
+		for(auto & i : trust){
+			counter[i[0]]--;
+			counter[i[1]]++;
 		}
 
-		map<int, vector<int>> counter {};
-		int c {};
-
-		for(auto& i : trust){
-			counter[i[0]].push_back(i[1]);
-		}
-
-		for(auto& i : counter.begin()->second){
-			for(auto& [key, value] : counter){
-				if(find(value.begin(), value.end(), i) != value.end()){
-					c++;
-				}
-			}
-
-			if(c == n-1 && counter.find(i) == counter.end()){
+		for(int i {1}; i < counter.size(); i++){
+			if(counter[i] == n-1){
 				return i;
 			}
-			c = 0;
 		}
+
 		return -1;
 	}
 };
