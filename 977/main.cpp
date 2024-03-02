@@ -29,11 +29,23 @@ struct TreeNode {
 class Solution {
 	public:
 	vector<int> sortedSquares(vector<int>& nums){
-		for (int &i : nums) {
-			i *= i;
+		int left {}, right {};
+		vector<int> answer (nums.size());
+
+		right = nums.size()-1;
+
+		for(int i = nums.size()-1; i >= 0; i--){
+			if(abs(nums[left]) >= abs(nums[right])){
+				answer[i] = pow(nums[left], 2);
+				left++;
+				continue;
+			}
+
+			answer[i] = pow(nums[right], 2);
+			right--;
+
 		}
-		sort(nums.begin(), nums.end());
-		return nums;
+		return answer;
 	}
 };
 template <typename T>
