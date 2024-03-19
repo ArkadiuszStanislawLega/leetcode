@@ -41,14 +41,15 @@ class Solution {
 	int leastInterval(vector<char>& tasks, int n){
 		int max_freq {}, total_time {};
 		int frequency [26] {};
-
 		for(const char& c : tasks){
 			frequency[c-'A']++;
 		}
 
-		max_freq = *max_element(frequency, end(frequency));
+		max_freq = *max_element(frequency, frequency+26);
 		total_time = (max_freq - 1) * (n+1);
-		total_time += count(frequency, end(frequency), max_freq);
+		int temp = count(frequency, frequency+26, total_time);
+		cout << temp << '\n';
+		total_time = total_time + count(frequency, frequency+26, total_time);
 
 		return max((int)tasks.size(), total_time);
 	}
