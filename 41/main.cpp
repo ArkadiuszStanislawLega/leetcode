@@ -57,13 +57,17 @@ class Solution {
 		}
 
 		max = *temp.rbegin();
+		set<int>::iterator it = temp.begin();
 		for(; answer < max; answer++){
-			if(temp.find(answer) == temp.end()){
+			if(*it != answer){
 				return answer;
 			}
+
+			it++;
 		}
-		return ++answer;
+		return ++answer;	
 	}
+
 };
 
 template <typename T>
