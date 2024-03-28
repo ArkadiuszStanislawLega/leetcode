@@ -37,27 +37,18 @@ struct ListNode {
 class Solution {
 	public:
 	int maxSubarrayLength(vector<int>& nums, int k){
-		int answer {};
+		int answer {}, start {-1};
+		unordered_map<int, int> counter;
 
-		for (size_t current_size {1}; current_size <= nums.size(); current_size++) {
-			for(size_t i {}; i < nums.size(); i++){
-				if(i+current_size <= nums.size()){
-					map<int, int> counter {};
-					size_t max = i+current_size;
-
-					for(size_t j {i}; j < max; j++){
-						if(counter[nums[j]]+1 > k){
-							break;
-						}
-
-						counter[nums[j]]++;
-						if(max-1 == j){
-							answer = current_size;
-						}
-					}
-				}
+		for (int end {}; end < nums.size(); end++) {
+			counter[nums[end]]++;
+			while (counter[nums[end]] > k) {
+				start++;
+				counter[nums[start]]--;
 			}
+			answer = max(answer, end - start);
 		}
+
 		return answer;
 	}
 };
