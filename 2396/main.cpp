@@ -1,3 +1,4 @@
+#include <bitset>
 #include <climits>
 #include <iostream>
 #include <iterator>
@@ -28,23 +29,12 @@ struct TreeNode {
 
 class Solution {
 	public:
-	int findJudge(int n, vector<vector<int>>& trust){
-		vector<int> counter (n+1);
-		for(auto & i : trust){
-			counter[i[0]]--;
-			counter[i[1]]++;
-		}
-
-		for(int i {1}; i < counter.size(); i++){
-			cout << i << ' ' << counter[i] << '\n';
-			if(counter[i] == n-1){
-				return i;
-			}
-		}
-
-		return -1;
+	bool isStrictlyPalindromic(int n ){
+		string s = bitset<8>(n).to_string();
+		return s == string(s.rbegin(), s.rend());
 	}
 };
+
 template <typename T>
 void print_vector(vector<T>& v){
 	cout << '{';
@@ -55,36 +45,24 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	int answer {};
+	bool answer {};
 	double elapsed_time {};
 
-	vector<pair<int, vector<vector<int>>>> tests = {
-		{2, {{1,2}}},
-		{3, {{1,3}, {2,3}}},
-		{3, {{1,3}, {2,3}, {3,1}}},
-		{4, {{1,3},{1,4},{2,3},{2,4},{4,3}}},
-		{3, {{1,2},{2,3}}},
-		{2, {}},
-		{1, {}},
-		{4, {{1,3},{1,4},{2,3}}},
+	vector<int> tests = {
+		9,
+		4
 	};
 
-	vector<int> answers = {
-		2,
-		3,
-		-1,
-		3,
-		-1,
-		-1,
-		1,
-		-1
+	vector<bool> answers = {
+		false,
+		false
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->findJudge(tests[i].first, tests[i].second);
+		answer = s->isStrictlyPalindromic(tests[i]);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';

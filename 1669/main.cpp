@@ -26,23 +26,41 @@ struct TreeNode {
 	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right){}
 };
 
+struct ListNode {
+	int val;
+	ListNode *next;
+	ListNode() : val(0), next(nullptr) {}
+	ListNode(int x) : val(x), next(nullptr) {}
+	ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
 class Solution {
 	public:
-	int findJudge(int n, vector<vector<int>>& trust){
-		vector<int> counter (n+1);
-		for(auto & i : trust){
-			counter[i[0]]--;
-			counter[i[1]]++;
-		}
+	ListNode* task(ListNode* list1, int a, int b, ListNode* list2){
+		int index {};
+		ListNode* start = nullptr;
+		ListNode* end = list1;
+		ListNode* tail = nullptr;
 
-		for(int i {1}; i < counter.size(); i++){
-			cout << i << ' ' << counter[i] << '\n';
-			if(counter[i] == n-1){
-				return i;
+		while(index < b){
+			if(index == a-1){
+				start = end;
 			}
+
+			end = end->next;
+			index++;
 		}
 
-		return -1;
+		start->next = list2;
+		tail = list2;
+		while(tail->next){
+			tail = tail->next;
+		}
+
+		tail->next = end->next;
+		end->next = nullptr;
+
+		return list1;
 	}
 };
 template <typename T>
@@ -55,39 +73,31 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	int answer {};
+	vector<int> answer {};
 	double elapsed_time {};
 
-	vector<pair<int, vector<vector<int>>>> tests = {
-		{2, {{1,2}}},
-		{3, {{1,3}, {2,3}}},
-		{3, {{1,3}, {2,3}, {3,1}}},
-		{4, {{1,3},{1,4},{2,3},{2,4},{4,3}}},
-		{3, {{1,2},{2,3}}},
-		{2, {}},
-		{1, {}},
-		{4, {{1,3},{1,4},{2,3}}},
+	vector<vector<vector<int>>> tests = {
+	{{}, {}, {}, {}},
+		{{}, {}}
 	};
 
-	vector<int> answers = {
-		2,
-		3,
-		-1,
-		3,
-		-1,
-		-1,
-		1,
-		-1
+	vector<vector<int>> answers = {
+		{},
+		{}
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->findJudge(tests[i].first, tests[i].second);
+		answer = s->task(tests[i]);
 		auto end = high_resolution_clock::now();
 
-		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';
+		cout << "test " << i+1 << "\n\ttarget value: ";
+		print_vector<int>(answers[i]);
+		cout << "\n\trecived value: ";
+		print_vector<int>(answer);
+		cout << '\n';
 
 		elapsed_time = duration<double, milli>(end-start).count();
 		cout << "\nelapsed time " << elapsed_time << "ms";

@@ -37,22 +37,25 @@ struct ListNode {
 class Solution {
 	public:
 	int numSubarrayProductLessThenK(vector<int>& nums, int k){
-		int answer {};
-		for(int window_size {1}; window_size <= nums.size(); window_size++){
-			for(int i {}; i < nums.size(); i++){
-				if(i + window_size <= nums.size()){
-					long long int current_value {1};
-					for(int j {i}; j < i+window_size; j++){
-						current_value *= nums[j];
-					}
-					if(current_value < k){
-						answer++;
-					}
-				}
-			}
-		}
+		int 	left {}, 
+			right {}, 
+			product {1}, 
+			count {};
 
-		return answer;
+		if(k <= 1) 
+			return 0;
+
+		while (right < nums.size()) {
+			product *= nums[right];
+
+			while (product >= k) {
+				product /= nums[left++];
+			}
+
+			count += 1 + (right - left);
+			right++;
+		}
+		return count;
 	}
 };
 

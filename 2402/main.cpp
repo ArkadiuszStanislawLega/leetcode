@@ -48,25 +48,24 @@ class Solution {
 	class Room{
 		public:
 		int counter {}, number {};
-		bool is_occupied {};
 		Meeting* meeting {};
 
 		Room(int _number){
 			this->number = _number;
 		}
 
-		void startMeeting(Meeting* meeting){
-			if(!is_occupied){
-				this->meeting = meeting;
-				this->is_occupied = true;
+		void startMeeting(Meeting* _meeting){
+			if(this->meeting == nullptr){
+				this->meeting = _meeting;
 				this->counter++;
 				this->meeting->is_started = true;
 			}
 		}
 
 		void endMeeting(){
-			if(this->is_occupied){
+			if(this->meeting != nullptr){
 				this->meeting->is_finshed = true;
+				this->meeting = nullptr;
 			}
 		}
 	}; 
@@ -97,18 +96,16 @@ class Solution {
 		if(this->_max.second == pretendent.second && this->_max.first > pretendent.first) {
 			this->_max = pretendent;
 		}
-
 	}
 
 	void updateRooms(int& time){
 		for(Room& r : this->_rooms){
-			if(r.is_occupied && time == r.meeting->end){
+			if(r.meeting != nullptr && time == r.meeting->end){
 				r.meeting->is_finshed = true;
-				r.is_occupied = false;
 				this->_counter_finished_meetings++;
 			}
 
-			if(!r.is_occupied){
+			if(r.meeting == nullptr){
 				for(Meeting* m : this->_meetings){
 					if(!m->is_started && !m->is_finshed && m->start == time){
 						r.startMeeting(m);
@@ -117,7 +114,6 @@ class Solution {
 					}
 				}
 			}
-
 		}
 	}
 
@@ -130,7 +126,7 @@ class Solution {
 	}
 
 	bool isFinishedLoop(){
-		return this->_counter_finished_meetings == this->_meetings.size();
+		return this->_counter_finished_meetings >= this->_meetings.size();
 	}
 
 	void mainLoop(){

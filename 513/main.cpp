@@ -1,6 +1,7 @@
 #include <climits>
 #include <iostream>
 #include <iterator>
+#include <queue>
 #include <ratio>
 #include <string>
 #include <unordered_map>
@@ -28,23 +29,30 @@ struct TreeNode {
 
 class Solution {
 	public:
-	int findJudge(int n, vector<vector<int>>& trust){
-		vector<int> counter (n+1);
-		for(auto & i : trust){
-			counter[i[0]]--;
-			counter[i[1]]++;
-		}
+	int task(TreeNode* root){
+		queue<TreeNode*> q;
+		TreeNode* current = root;
+		q.push(current);
 
-		for(int i {1}; i < counter.size(); i++){
-			cout << i << ' ' << counter[i] << '\n';
-			if(counter[i] == n-1){
-				return i;
+		while (!q.empty()) {
+			current = q.front();
+			q.pop();
+			
+			if (current->right) {
+				q.push(current->right);
 			}
+			
+			if(current->left){
+				q.push(current->left);
+			}
+
+		
 		}
 
-		return -1;
+		return current->val;
 	}
 };
+
 template <typename T>
 void print_vector(vector<T>& v){
 	cout << '{';
@@ -58,33 +66,17 @@ int main (int argc, char *argv[]) {
 	int answer {};
 	double elapsed_time {};
 
-	vector<pair<int, vector<vector<int>>>> tests = {
-		{2, {{1,2}}},
-		{3, {{1,3}, {2,3}}},
-		{3, {{1,3}, {2,3}, {3,1}}},
-		{4, {{1,3},{1,4},{2,3},{2,4},{4,3}}},
-		{3, {{1,2},{2,3}}},
-		{2, {}},
-		{1, {}},
-		{4, {{1,3},{1,4},{2,3}}},
+	vector<> tests = {
 	};
 
-	vector<int> answers = {
-		2,
-		3,
-		-1,
-		3,
-		-1,
-		-1,
-		1,
-		-1
+	vector<> answers = {
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->findJudge(tests[i].first, tests[i].second);
+		answer = s->task(tests[i]);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';

@@ -38,28 +38,22 @@ class Solution {
 	public:
 	vector<int> findDisapprearedNumbers(vector<int>& nums){
 		vector<int> answer {};
-		set<int> counter{};
-		for(int& i : nums){
-			counter.insert(i);
+		int size = nums.size();
+
+		vector<int>::iterator it = unique(nums.begin(), nums.end());
+		nums.erase(it, nums.end());
+		sort(nums.begin(), nums.end());
+		int diff = 1;
+		for(int i {1}; i <= size; i++){
+			if(diff+i >= size){
+				break;
+			}
+			if(i != nums[i-diff]){
+				answer.push_back(i);
+				diff++;
+			}
 		}
 		
-	
-		set<int>::iterator it = counter.begin();
-		for(int i {1}; i <= nums.size(); i++){
-			if(it == counter.end()){
-				answer.push_back(i);
-				continue;
-			}
-
-			if(i == *it){
-				it++;
-				continue;
-			}
-
-			if(i != *it){
-				answer.push_back(i);
-			}
-		}
 		return answer;
 	}
 };
