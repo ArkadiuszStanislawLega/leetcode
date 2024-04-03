@@ -53,6 +53,22 @@ class Solution {
 		return this->_word[this->_i] == this->_board[v][c];
 	}
 
+	bool isFoundOnTheRight(int v, int c){
+		return c+1 < this->_board[v].size() && this->isLookingLetter(v, c+1) && isValid(v, c+1);
+	}
+
+	bool isFoundOnTheBottom(int v, int c){
+		return v+1 < this->_board.size() && this->isLookingLetter(v+1, c) && isValid(v+1, c);
+	}
+
+	bool isFoundOnTheLeft(int v, int c){
+		return c > 0 && this->isLookingLetter(v, c-1) && isValid(v, c-1);
+	}
+
+	bool isFoundOnTheTop(int v, int c){
+		return v > 0 && this->isLookingLetter(v-1, c)&& isValid(v-1, c);
+	}
+
 	public:
 	bool exist(vector<vector<char>>& board, string word){
 		this->_board = board;
@@ -64,10 +80,10 @@ class Solution {
 				}
 
 				if(this->isLookingLetter(v, c) && isValid(v, c)) continue;
-				if(c+1 < this->_board[v].size() && this->isLookingLetter(v, c+1) && isValid(v, c+1)) continue;
-				if(v+1 < board.size() && this->isLookingLetter(v+1, c) && isValid(v+1, c)) continue;
-				if(c > 0 && this->isLookingLetter(v, c-1) && isValid(v, c-1)) continue;
-				if(v > 0 && this->isLookingLetter(v-1, c)&& isValid(v-1, c)) continue;
+				if(isFoundOnTheRight(v, c)) continue;
+				if(isFoundOnTheBottom(v, c)) continue;
+				if(isFoundOnTheLeft(v, c)) continue;
+				if(isFoundOnTheTop(v, c)) continue;
 			}
 		}
 		return this->_i >= word.size();
