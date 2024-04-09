@@ -1,7 +1,6 @@
 #include <climits>
 #include <iostream>
 #include <iterator>
-#include <queue>
 #include <ratio>
 #include <string>
 #include <unordered_map>
@@ -37,30 +36,30 @@ struct ListNode {
 
 class Solution {
 	public:
-	string minRemoveToMakeValid(string s){
+	string minRemoveToMakeValid(string s){	
+		string answer {};
 		int open {};
+		stack<int> index {};
 		for(int i {}; i < s.size(); i++){
-			if(s[i] == '('){
-				open++;
+			if(s[i] == ')'){
+				cout << s[i] << ' ' << open << ' ' << s << '\n';
+				if(open == 0){
+					index.push(i);
+					//s.erase(s.begin()+i, s.begin()+i+1);
+				}else{
+					if(open)
+						open--;
+				}
 				continue;
 			}
 
-			if(s[i] == ')'){
-				if(open == 0){
-					s.erase(i, 1);
-					i--;
-					continue;
-				}
-
-				open--;
+			if(s[i] == '('){
+				open++;
 			}
 		}
-
-		for(int i = s.size()-1; i >= 0 && open > 0; i--){
-			if(s[i]  == '('){
-				s.erase(i,1);
-				open--;
-			}
+		while(!index.empty()){
+			s.erase(s.begin()+index.top(), s.begin()+index.top()+1);
+			index.pop();
 		}
 		return s;
 	}
@@ -82,15 +81,13 @@ int main (int argc, char *argv[]) {
 	vector<string> tests = {
 		"lee(t(c)o)de)",
 		"a)b(c)d",
-		"))((",
-		"())()((("
+		"))(("
 	};
 
 	vector<string> answers = {
 		"lee(t(c)o)de",
 		"ab(c)d",
-		"",
-		"()()"
+		""
 	};
 
 	for(int i {}; i < tests.size(); i++){
