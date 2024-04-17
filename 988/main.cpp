@@ -37,36 +37,29 @@ struct ListNode {
 
 class Solution {
 	private:
-	vector<int> countWay(TreeNode* node, vector<int> counter){
+	string _smallest {};
+	void countSmallest(TreeNode* node, string current=""){
 		if(!node){
-			return {};
+			return;
 		}
 
-		counter.push_back(node->val);
+		current = char('a'+node->val) + current;
 
 		if(!node->left && !node->right){
-			return counter;	
+			if(this->_smallest.empty() || this->_smallest > current){
+				this->_smallest = current;
+			}
+			return;
 		}
 
-		vector<int> vright {}, vleft{};
-		int left {}, right {};
-
-		vright = countWay(node->left, counter);
-		vleft = countWay(node->right, counter);
-
-		left = accumulate(vleft.begin(), vleft.end(), 0);
-		right = accumulate(vright.begin(), vright.end(), 0);
-
-		return left < right ? vleft : vright; 
+		countSmallest(node->left, current);
+		countSmallest(node->right, current);
 	}
+
 	public:
 	string smallestFromLeaf(TreeNode* root){
-		string answer {};
-		for(const int& i : countWay(root, {})){
-			answer += 'a'+i;
-		}
-		reverse(answer.begin(), answer.end());
-		return answer;
+		countSmallest(root);
+		return this->_smallest;
 	}
 };
 
