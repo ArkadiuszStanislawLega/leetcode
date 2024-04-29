@@ -36,25 +36,16 @@ struct ListNode {
 
 class Solution {
 	private:
-	vector<int> _nums{};
-	int _temp {}, _answer {}; 
-
-	void magic(int i){
-		if(i == this->_nums.size()){
-			this->_answer += this->_temp;
-			return;
+	int magic(vector<int>& nums, int i, int sum){
+		if(i == nums.size()){
+			return sum;
 		}
+		return magic(nums, i+1, sum ^ nums[i])+magic(nums, i+1, sum);
 
-		this->_temp ^= this->_nums[i];
-		magic(i+1);
-		this->_temp ^= this->_nums[i];
-		magic(i+1);
 	}
 	public:
 	int subsetXORSum(vector<int>& nums){
-		this->_nums = nums;
-		magic(0);
-		return this->_answer;
+		return magic(nums, 0,0);
 	}
 };
 
