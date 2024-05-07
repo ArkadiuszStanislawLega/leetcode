@@ -39,6 +39,7 @@ class Solution {
 	int numberOfPoints(vector<vector<int>>& nums){
 		int answer {};
 		int counter[101] {};
+
 		for(int i{}; i < nums.size(); i++){
 			counter[nums[i][0]]++;
 			counter[nums[i][1]+1]--;

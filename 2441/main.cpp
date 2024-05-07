@@ -1,6 +1,7 @@
 #include <climits>
 #include <iostream>
 #include <iterator>
+#include <new>
 #include <ratio>
 #include <string>
 #include <unordered_map>
@@ -36,20 +37,17 @@ struct ListNode {
 
 class Solution {
 	public:
-	long long countSubarrays(vector<int>& nums, int k){
-		long long answer {};
-		vector<int> maxValIndexes {};
-		int max_val = *max_element(nums.begin(), nums.end());
+	int findMaxK(vector<int>& nums){
+		int i {}, j {};
+		sort(nums.begin(), nums.end());
+		j = nums.size()-1;
 
-		for(int index{}; index < nums.size(); index++){
-			if(nums[index] == max_val){
-				maxValIndexes.push_back(index);
-			}
-			if(maxValIndexes.size() >= k){
-				answer += maxValIndexes[maxValIndexes.size()-k]+1;
-			}
+		while(i < j && nums[i] < 0 && nums[j] > 0){
+			if(abs(nums[i]) == nums[j]) return nums[j];
+			if(abs(nums[i]) > nums[j]) i++;
+			else j--;
 		}
-		return answer;
+		return -1;
 	}
 };
 
@@ -63,24 +61,32 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	long long answer {};
+	int answer {};
 	double elapsed_time {};
 
-	vector<pair<vector<int>, int>> tests = {
-		{{1,3,2,3,3},2},
-		{{1,4,2,1},3}
+	vector<vector<int>> tests = {
+		{-1, 2, -3, 3},
+		{-1, 10, 6, 7, -7, 1},
+		{-10, 8,6,7,-2,-3},
+		{-30,34,1,32,26,-9,-30,22,-49,29,48,47,38,4,43,12,-1,-8,11,-37,32,40,9,15,-34,-34,-16,-5,26,-44,-36,-13,-16,10,39,-17,-22,17,-16},
+		{-9,-43,24,-23,-16,-30,-38,-30},
+		{-49,8,19,-39,37,22,-39,4,37,8,20,-2,-4,-5,14,-14,-27,24,30,3,-12,19,22,28,-3,-6,6,22,37,27,16,27,-6,-49,31,29}
 	};
 
-	vector<long long> answers = {
-		6,
-		0
+	vector<int> answers = {
+		3,
+		7,
+		-1,
+		34,
+		-1,
+		27
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->countSubarrays(tests[i].first, tests[i].second);
+		answer = s->findMaxK(tests[i]);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';

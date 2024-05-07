@@ -36,20 +36,28 @@ struct ListNode {
 
 class Solution {
 	public:
-	long long countSubarrays(vector<int>& nums, int k){
-		long long answer {};
-		vector<int> maxValIndexes {};
-		int max_val = *max_element(nums.begin(), nums.end());
-
-		for(int index{}; index < nums.size(); index++){
-			if(nums[index] == max_val){
-				maxValIndexes.push_back(index);
-			}
-			if(maxValIndexes.size() >= k){
-				answer += maxValIndexes[maxValIndexes.size()-k]+1;
-			}
+	TreeNode* addOneRow(TreeNode* root, int val, int depth){
+		int currentLevel {1};
+		TreeNode* curr = root;
+		while(currentLevel != depth){
+			curr = curr->left;
+			currentLevel++;
 		}
-		return answer;
+
+		TreeNode* temp = curr->left;
+		curr->val = val;
+		curr->left = temp;
+		currentLevel = 1;
+		curr = root;
+		while(currentLevel != depth){
+			curr = curr->right;
+			currentLevel++;
+		}
+		temp = curr->right;
+		curr->val = val;
+		curr->right = temp;
+
+		return root;
 	}
 };
 
@@ -63,24 +71,20 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	long long answer {};
+	int answer {};
 	double elapsed_time {};
 
-	vector<pair<vector<int>, int>> tests = {
-		{{1,3,2,3,3},2},
-		{{1,4,2,1},3}
+	vector<> tests = {
 	};
 
-	vector<long long> answers = {
-		6,
-		0
+	vector<> answers = {
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->countSubarrays(tests[i].first, tests[i].second);
+		answer = s->task(tests[i]);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';

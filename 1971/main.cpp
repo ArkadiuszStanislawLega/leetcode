@@ -36,20 +36,28 @@ struct ListNode {
 
 class Solution {
 	public:
-	long long countSubarrays(vector<int>& nums, int k){
-		long long answer {};
-		vector<int> maxValIndexes {};
-		int max_val = *max_element(nums.begin(), nums.end());
+	bool validPath(int n, vector<vector<int>>& edges, int source, int destination){
+		if(n == 1 ){ return true; }
+		vector<bool> visited (n, false);
+		bool isVisitedVertex {true};
 
-		for(int index{}; index < nums.size(); index++){
-			if(nums[index] == max_val){
-				maxValIndexes.push_back(index);
-			}
-			if(maxValIndexes.size() >= k){
-				answer += maxValIndexes[maxValIndexes.size()-k]+1;
+		visited[source] = true;
+
+		while(isVisitedVertex){
+			isVisitedVertex = false;
+			for(const vector<int>& edge : edges){
+				if(visited[edge[0]] != visited[edge[1]]){
+					visited[edge[0]] = true;
+					visited[edge[1]] = true;
+					isVisitedVertex = true;
+				}
+
+				if(visited[destination]){
+					return true;
+				}
 			}
 		}
-		return answer;
+		return false;
 	}
 };
 
@@ -63,24 +71,32 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	long long answer {};
+	bool answer {};
 	double elapsed_time {};
 
-	vector<pair<vector<int>, int>> tests = {
-		{{1,3,2,3,3},2},
-		{{1,4,2,1},3}
+	vector<pair<int, vector<vector<int>>>> tests = {
+		{3,{{0,1},{1,2},{2,0}}},
+		{6,{{0,1},{0,2},{3,5},{5,4},{4,3}}},
+		{10,{{4,3},{1,4},{4,8},{1,7},{6,4},{7,4},{4,0},{0,9},{5,4}}},
 	};
 
-	vector<long long> answers = {
-		6,
-		0
+	vector<pair<int, int>> tests1 = {
+		{0,2},
+		{0,5},
+		{5,9}
+	};
+
+	vector<bool> answers = {
+		true,
+		false,
+		true,
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->countSubarrays(tests[i].first, tests[i].second);
+		answer = s->validPath(tests[i].first, tests[i].second, tests1[i].first, tests1[i].second);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';

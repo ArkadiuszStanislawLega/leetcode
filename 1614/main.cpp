@@ -39,13 +39,13 @@ class Solution {
 	public:
 	int maxDepth(string s){
 		int answer {}, counter {};
-		for(int i {}; i < s.size(); i++){
-			if(s[i] == '('){
+		for(const char& c : s){
+			if(c == '('){
 				counter++;
 				answer = max(answer, counter);
 				continue;
 			}
-			if(s[i] == ')'){
+			if(c == ')'){
 				counter--;
 				continue;
 			}

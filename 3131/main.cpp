@@ -36,20 +36,11 @@ struct ListNode {
 
 class Solution {
 	public:
-	long long countSubarrays(vector<int>& nums, int k){
-		long long answer {};
-		vector<int> maxValIndexes {};
-		int max_val = *max_element(nums.begin(), nums.end());
-
-		for(int index{}; index < nums.size(); index++){
-			if(nums[index] == max_val){
-				maxValIndexes.push_back(index);
-			}
-			if(maxValIndexes.size() >= k){
-				answer += maxValIndexes[maxValIndexes.size()-k]+1;
-			}
-		}
-		return answer;
+	int addedInteger(vector<int>& nums1, vector<int>& nums2){
+		sort(nums1.begin(), nums1.end());
+		sort(nums2.begin(), nums2.end());
+	
+		return *nums2.begin() - *nums1.begin();
 	}
 };
 
@@ -63,16 +54,18 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	long long answer {};
+	int answer {};
 	double elapsed_time {};
 
-	vector<pair<vector<int>, int>> tests = {
-		{{1,3,2,3,3},2},
-		{{1,4,2,1},3}
+	vector<pair<vector<int>, vector<int>>> tests = {
+		{{2,6,4},{9,7,5}},
+		{{10},{5}},
+		{{1,1,1,1},{1,1,1,1}},
 	};
 
-	vector<long long> answers = {
-		6,
+	vector<int> answers = {
+		3,
+		-5,
 		0
 	};
 
@@ -80,7 +73,7 @@ int main (int argc, char *argv[]) {
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->countSubarrays(tests[i].first, tests[i].second);
+		answer = s->addedInteger(tests[i].first, tests[i].second);
 		auto end = high_resolution_clock::now();
 
 		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';
