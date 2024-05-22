@@ -36,34 +36,23 @@ struct ListNode {
 
 class Solution {
 	public:
-	vector<int> distinctDifferenceArray(vector<int>& nums){
-		vector<int> answer (nums.size());
-		map<int, int> prefix, suffix;
-		int valPrefix {}, valSuffix{};
+	int repeatedNTimes(vector<int>& nums){
+		int n = nums.size()/2;
+		unordered_map<int, int> counter;
+        
+		for(const int &i : nums){
+			if(!counter[i]){
+				counter[i] = count(nums.begin(), nums.end(), i);
 
-		for(int i {}; i < nums.size(); i++){
-			auto check = [&](pair<int, int> x){return x.second >= 1;};
-
-			for(int j {i}; j >= 0; j--){
-				prefix[nums[j]]++;
+				if(counter[i] == n){
+					return i;
+				}
 			}
-
-			for(int j {i+1}; j < nums.size(); j++){
-				suffix[nums[j]]++;
-			}
-			
-			valPrefix = count_if(prefix.begin(), prefix.end(), check);
-			valSuffix = count_if(suffix.begin(), suffix.end(), check);
-
-			answer[i] = valPrefix-valSuffix;
-
-			prefix.clear();
-			suffix.clear();
-			valPrefix = valSuffix = 0;
 		}
-		return answer;
+		return -1;
 	}
 };
+
 template <typename T>
 void print_vector(vector<T>& v){
 	cout << '{';
@@ -74,31 +63,29 @@ void print_vector(vector<T>& v){
 }
 
 int main (int argc, char *argv[]) {
-	vector<int> answer {};
+	int answer {};
 	double elapsed_time {};
 
 	vector<vector<int>> tests = {
-		{1,2,3,4,5},
-		{3,2,3,4,2}, 
+		{1,2,3,3},
+		{2,1,2,5,3,2},
+		{5,1,5,2,5,3,5,4}
 	};
 
-	vector<vector<int>> answers = {
-		{-3,-1,1,3,5},
-		{-2,-1,0,2,3}
+	vector<int> answers = {
+		3,
+		2,
+		5
 	};
 
 	for(int i {}; i < tests.size(); i++){
 		Solution *s = new Solution();
 
 		auto start = high_resolution_clock::now();
-		answer = s->distinctDifferenceArray(tests[i]);
+		answer = s->repeatedNTimes(tests[i]);
 		auto end = high_resolution_clock::now();
 
-		cout << "test " << i+1 << "\n\ttarget value: ";
-		print_vector<int>(answers[i]);
-		cout << "\n\trecived value: ";
-		print_vector<int>(answer);
-		cout << '\n';
+		cout << "test " << i+1 << "\n\ttarget value: " << answers[i] << "\n\trecived value: " << answer << '\n';
 
 		elapsed_time = duration<double, milli>(end-start).count();
 		cout << "\nelapsed time " << elapsed_time << "ms";
