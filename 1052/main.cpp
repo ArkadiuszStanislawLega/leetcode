@@ -1,6 +1,7 @@
 #include <climits>
 #include <iostream>
 #include <iterator>
+#include <numeric>
 #include <ratio>
 #include <string>
 #include <unordered_map>
@@ -38,39 +39,26 @@ class Solution {
 	public:
 	int maxSatisfied(vector<int>& customers, vector<int>& grumpy, int minutes){
 		int answer {}, round_sum {};
-		vector<int> counter (3, 0);
-		for(int i {}; i < customers.size(); i++){
-			int last_index = i+minutes-1;
-			if (last_index >= customers.size()){
-				break;
-			}
-
-			vector<int> temp (3);
-			temp[1] = i;
-			for(int j {i}; j <= last_index ; j++){
-				round_sum += customers[j];
-
-				if (j == last_index){
-					temp[2] = j;
-
-					if(counter[0] < round_sum){
-						temp[0] = round_sum;
-						counter = vector<int>(temp);
+		for(int gap {}; gap < customers.size(); gap++){
+			for(int i {}; i < customers.size() ; i++){
+				if (i == gap){
+					int last_index = i+minutes-1;
+					if (last_index >= customers.size()){
+						round_sum = 0;
+						break;
 					}
-					round_sum = 0;
+					for(int j {i}; j <= last_index;j++){
+						round_sum += customers[i];
+						i++;
+					}
 				}
+				
+				if(!grumpy[i]){
+					round_sum += customers[i];
+				} 
 			}
-		}
-
-		for(int i {}; i < counter[1]; i++){
-			if(grumpy[i]){
-				continue;
-			}
-			answer += customers[i];
-		}
-		answer += counter[0];
-		for(int i {counter[2]+1}; i < customers.size(); i++){
-			answer+= customers[i];
+			answer = max(answer, round_sum);
+			round_sum = 0;
 		}
 		return answer;
 	}
@@ -90,15 +78,22 @@ int main (int argc, char *argv[]) {
 	double elapsed_time {};
 
 	vector<vector<vector<int>>> tests = {
-		{{1,0,1,2,1,1,7,5}, {0,1,0,1,0,1,0,1}}
+		{{1,0,1,2,1,1,7,5}, {0,1,0,1,0,1,0,1}},
+		{{1},{0}},
+		{{4,10,10},{1,1,0}}
+
 	};
 
 	vector<int> test2 = {
-		3
+		3,
+		1,
+		2
 	};
 
 	vector<int> answers = {
-		16
+		16,
+		1,
+		24
 	};
 
 	for(int i {}; i < tests.size(); i++){
