@@ -40,10 +40,10 @@ class Solution {
 		vector<string> answer (score.size());
 		vector<pair<int, int>> counter {};
 
-		for(int i {}; i < score.size(); i++){
-			counter.push_back({score[i], i});
-		}
-		sort(counter.rbegin(), counter.rend());
+			for(int i {}; i < score.size(); i++){
+				counter.push_back({score[i], i});
+			}
+			sort(counter.rbegin(), counter.rend());
 
 		for(int i {}; i < score.size(); i++){
 			if(i < 1){
