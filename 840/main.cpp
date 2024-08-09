@@ -36,70 +36,64 @@ struct ListNode {
 };
 
 class Solution {
+	private: 
+	vector<vector<int>> _grid;
+	bool is_numbers_in_subgrid_valid(int x, int y){
+		set<int> unique; 
+		for(int i {x}; i < x+3; i++){
+			for(int j {y}; j < y+3; j++){
+				int current_number = this->_grid[i][j];
+				if(current_number > 9 || current_number == 0){
+					return false;
+				} 
+
+				if(!unique.insert(current_number).second){
+					return false;
+				}
+			}	
+		}
+		return unique.size() == 9;
+	}
+
+	bool is_column_and_rows_eq(int x, int y){
+		vector<int> counter (6);
+
+		counter[0] = this->_grid[x][y] + this->_grid[x+1][y] + this->_grid[x+2][y];
+		counter[1] = this->_grid[x][y+1] + this->_grid[x+1][y+1] + this->_grid[x+2][y+1];
+		counter[2] = this->_grid[x][y+2] + this->_grid[x+1][y+2] + this->_grid[x+2][y+2];
+
+		counter[3] = this->_grid[x][y] + this->_grid[x][y+1] + this->_grid[x][y+2];
+		counter[4] = this->_grid[x+1][y] + this->_grid[x+1][y+1] + this->_grid[x+1][y+2];
+		counter[5] = this->_grid[x+2][y] + this->_grid[x+2][y+1] + this->_grid[x+2][y+2];
+			
+		for(int i {1}; i < counter.size(); i++){
+			if(counter[i] != counter[i-1]){
+				return false;
+			}
+		}	
+		return true;
+	}
+
 	public:
 	int numMagicSquaresInside(vector<vector<int>>& grid){
+		this->_grid = grid;
 		int answer {}, val {};
+
 		if(grid.size() < 3){
 			return 0;
 		}
+
 		for(int x {}; x < grid.size(); x++){
-			if( x + 3 > grid.size()){
-				continue;
-			}
-
 			for(int y {}; y < grid.size(); y++){
-				if(y + 3 > grid.size()){
+				if(y+3 > grid.size() || x+3 > grid.size()){
 					continue;
 				}
 
-				set<int> temp;
-				bool is_higher_then_10 {};
-				temp.insert(grid[x][y]);
-				temp.insert(grid[x+1][y]);
-				temp.insert(grid[x+2][y]);
-				temp.insert(grid[x][y+1]);
-				temp.insert(grid[x+1][y+1]);
-				temp.insert(grid[x+2][y+1]);
-				temp.insert(grid[x][y+2]);
-				temp.insert(grid[x+1][y+2]);
-				temp.insert(grid[x+2][y+2]);
-
-				for (auto i : temp){
-					if (i > 9 || i == 0){
-						is_higher_then_10 = true;
-						break;
-					}		
-				}
-
-				if(is_higher_then_10){
+				if(!is_numbers_in_subgrid_valid(x, y)){
 					continue;
 				}
 
-				if(temp.size() < 9){
-					continue;
-				}
-
-				bool is_all_eq {};
-				vector<int> counter (6);
-
-				counter[0] = grid[x][y] + grid[x+1][y] + grid[x+2][y];
-				counter[1] = grid[x][y+1] + grid[x+1][y+1] + grid[x+2][y+1];
-				counter[2] = grid[x][y+2] + grid[x+1][y+2] + grid[x+2][y+2];
-
-				counter[3] = grid[x][y] + grid[x][y+1] + grid[x][y+2];
-				counter[4] = grid[x+1][y] + grid[x+1][y+1] + grid[x+1][y+2];
-				counter[5] = grid[x+2][y] + grid[x+2][y+1] + grid[x+2][y+2];
-					
-				for(int i {1}; i < counter.size(); i++){
-					if(counter[i] != counter[i-1]){
-						break;
-					}
-
-					if(i == counter.size()-1){
-						is_all_eq = true;
-					}
-				}	
-				if (is_all_eq){
+				if (is_column_and_rows_eq(x, y)){
 					answer++;
 				}
 			}
